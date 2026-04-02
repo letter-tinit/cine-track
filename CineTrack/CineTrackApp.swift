@@ -10,8 +10,9 @@ import SwiftUI
 @main
 struct CineTrackApp: App {
     var body: some Scene {
+        let container = AppContainer()
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: container.makeMovieListViewModel())
         }
     }
 }
