@@ -13,6 +13,18 @@ final class MovieRepositoryImpl: MovieRepository {
     }
     
     func getTrendingMovies() async throws -> [Movie] {
-        try await apiClient.fetchTrendingMovies()
+        let response: MovieResponse = try await apiClient.fetchData(
+            endpoint: APIConstants.Movie.trending,
+            params: [:]
+        )
+        return response.results
+    }
+    
+    func getPopularTVShow() async throws -> [TVShow] {
+        let response: TVShowResponse = try await apiClient.fetchData(
+            endpoint: APIConstants.TVShow.popular,
+            params: [:]
+        )
+        return response.results
     }
 }

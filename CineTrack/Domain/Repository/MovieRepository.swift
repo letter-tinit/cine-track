@@ -7,4 +7,5 @@
 
 protocol MovieRepository {
     func getTrendingMovies() async throws -> [Movie]
+    func getPopularTVShow() async throws -> [TVShow]
 }

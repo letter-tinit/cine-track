@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Movie: Decodable, Identifiable {
+public struct Movie: Decodable, Identifiable, Hashable {
     public let id: Int
     public let adult: Bool
     public let backdropPath: String?

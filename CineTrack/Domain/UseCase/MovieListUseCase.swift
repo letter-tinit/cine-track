@@ -9,6 +9,7 @@ import Foundation
 
 public protocol MovieListUseCase {
     func getTrendingMovies() async throws -> [Movie]
+    func getPopularTVShow() async throws -> [TVShow]
 }
 
 final class MovieListUseCaseImpl: MovieListUseCase {
@@ -20,5 +21,9 @@ final class MovieListUseCaseImpl: MovieListUseCase {
     
     func getTrendingMovies() async throws -> [Movie] {
         try await repository.getTrendingMovies()
+    }
+    
+    func getPopularTVShow() async throws -> [TVShow] {
+        try await repository.getPopularTVShow()
     }
 }
