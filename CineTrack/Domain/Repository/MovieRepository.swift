@@ -6,6 +6,7 @@
 //
 
 protocol MovieRepository {
-    func getTrendingMovies() async throws -> [Movie]
-    func getPopularTVShow() async throws -> [TVShow]
+    func getTrendingMovies(timePeriod: TimePeriod) async throws -> [Movie]
+    func fetchMoviesByCategory(page: Int, endpoint: MovieEndpointMapping) async throws -> [Movie]
+    func fetchMovieDetailById(_ id: Int) async throws -> MovieDetail
 }

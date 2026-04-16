@@ -9,8 +9,20 @@ import Foundation
 
 enum APIError: Error {
     case badURL
-    case badResponse
-    case decodingError
+    case network(Error)
+    case decoding(Error)
+    case apiError(message: String, code: Int)
+    case unknown
+}
+
+struct TMDBErrorResponse: Decodable {
+    let statusCode: Int
+    let statusMessage: String
+    
+    enum CodingKeys: String, CodingKey {
+        case statusCode = "status_code"
+        case statusMessage = "status_message"
+    }
 }
 
 protocol APIClient {
@@ -25,24 +37,19 @@ final class TMDBAPIClient: APIClient {
         endpoint: String,
         params: [String: Any] = [:]
     ) async throws -> T {
+        // MARK: - Create URL Component
         guard var components = URLComponents(string: baseURL + endpoint) else {
             throw APIError.badURL
         }
         
-        if params.isEmpty {
-            components.queryItems = [
-                URLQueryItem(name: "api_key", value: apiKey)
-            ]
-        } else {
-            components.queryItems = params.map { key, value in
-                URLQueryItem(name: key, value: String(describing: value))
-            }
-            components.queryItems?.append(
-                URLQueryItem(name: "api_key", value: apiKey)
-            )
+        var queryItems = params.map {
+            URLQueryItem(name: $0.key, value: "\($0.value)")
         }
+        queryItems.append(URLQueryItem(name: "api_key", value: apiKey))
         
+        components.queryItems = queryItems
         
+        // MARK: - Create final URL from URL Component
         guard let url = components.url else {
             throw APIError.badURL
         }
@@ -51,23 +58,40 @@ final class TMDBAPIClient: APIClient {
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let data: Data
+        let response: URLResponse
         
-        if let jsonString = String(data: data, encoding: .utf8) {
-            print("Response -----------------------------------------\n\(jsonString)")
-        }
-        
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200..<300).contains(httpResponse.statusCode) else {
-            throw APIError.badResponse
-        }
-        
+        // MARK: - Fetch data from API
         do {
-            let decoded = try JSONDecoder().decode(T.self, from: data)
-            return decoded
+            (data, response) = try await URLSession.shared.data(for: request)
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Response ---------------------\(endpoint)--------------------\n\(jsonString)")
+            }
         } catch {
-            print("Decoding error", error.localizedDescription)
-            throw APIError.decodingError
+            throw APIError.network(error)
+        }
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.unknown
+        }
+        
+        // MARK: - Handle Error from Server
+        guard (200..<300).contains(httpResponse.statusCode) else {
+            if let apiError = try? JSONDecoder().decode(TMDBErrorResponse.self, from: data) {
+                throw APIError.apiError(message: apiError.statusMessage, code: apiError.statusCode)
+            } else {
+                throw APIError.apiError(
+                    message: "Unknown server error",
+                    code: httpResponse.statusCode
+                )
+            }
+        }
+        
+        // MARK: - Success Decoded Case
+        do {
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            throw APIError.decoding(error)
         }
     }
 }

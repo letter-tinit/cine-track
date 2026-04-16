@@ -7,67 +7,104 @@
 
 import Foundation
 
-public struct Movie: Decodable, Identifiable, Hashable {
+public struct MovieResponse: Decodable {
+    public let page: UInt
+    public let results: [Movie]
+    public let totalPages: UInt
+    public let totalResults: UInt
+
+    
+    enum CodingKeys: String, CodingKey {
+        case page, results
+        case totalPages = "total_pages"
+        case totalResults = "total_results"
+    }
+}
+
+public struct Movie: Hashable, Decodable, Identifiable {
     public let id: Int
-    public let adult: Bool
-    public let backdropPath: String?
     public let title: String
     public let originalTitle: String
     public let overview: String
     public let posterPath: String?
-    public let mediaType: String
-    public let originalLanguage: String
-    public let genreIds: [Int]
+    public let backdropPath: String?
+    public let genreIDs: [Int]
     public let popularity: Double
     public let releaseDate: String
-    public let video: Bool
     public let voteAverage: Double
     public let voteCount: Int
+    public let adult: Bool
+    public let video: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id
-        case adult
-        case backdropPath = "backdrop_path"
+        case id, overview, popularity, adult, video
         case title
         case originalTitle = "original_title"
-        case overview
         case posterPath = "poster_path"
-        case mediaType = "media_type"
-        case originalLanguage = "original_language"
-        case genreIds = "genre_ids"
-        case popularity
+        case backdropPath = "backdrop_path"
+        case genreIDs = "genre_ids"
         case releaseDate = "release_date"
-        case video
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
     }
 }
 
 extension Movie {
-    static let mock = Movie(
+    static let mock: Movie = Movie(
         id: 1,
+        title: "Inception",
+        originalTitle: "Inception",
+        overview: "A thief who steals corporate secrets through dream-sharing technology.",
+        posterPath: "/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
+        backdropPath: "/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
+        genreIDs: [28, 878],
+        popularity: 95.5,
+        releaseDate: "2010-07-16",
+        voteAverage: 8.8,
+        voteCount: 32000,
         adult: false,
-        backdropPath: "/test.jpg",
-        title: "Mock Movie",
-        originalTitle: "Mock Movie",
-        overview: "This is a mock movie for preview",
-        posterPath: "/tVvpFIoteRHNnoZMhdnwIVwJpCA.jpg",
-        mediaType: "movie",
-        originalLanguage: "en",
-        genreIds: [28, 12],
-        popularity: 100.0,
-        releaseDate: "2026-01-01",
-        video: false,
-        voteAverage: 8.5,
-        voteCount: 1000
+        video: false
     )
     
-    var posterURL: URL? {
-        guard let posterPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
-    }
+    static let mocks: [Movie] = [
+        .mock,
+        Movie(
+            id: 2,
+            title: "The Dark Knight",
+            originalTitle: "The Dark Knight",
+            overview: "Batman faces the Joker.",
+            posterPath: "/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
+            backdropPath: "/in1R2dDc421JxsoRWaIIAqVI2KE.jpg",
+            genreIDs: [28, 80],
+            popularity: 98.0,
+            releaseDate: "2008-07-18",
+            voteAverage: 9.0,
+            voteCount: 35000,
+            adult: false,
+            video: false
+        )
+    ]
+    
+    static let empty = Movie(
+        id: -1,
+        title: "",
+        originalTitle: "",
+        overview: "",
+        posterPath: "",
+        backdropPath: "",
+        genreIDs: [],
+        popularity: 0,
+        releaseDate: "",
+        voteAverage: 0,
+        voteCount: 0,
+        adult: false,
+        video: false
+    )
 }
 
-public struct MovieResponse: Decodable {
-    public let results: [Movie]
+extension Movie {
+    var posterURL: URL? {
+        guard let posterPath = posterPath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
+    }
 }

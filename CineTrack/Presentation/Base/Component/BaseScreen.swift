@@ -14,18 +14,23 @@ enum BackgroundGradientType {
     case custom(linear: [Color]? = nil, radial: [Color]? = nil)
 }
 
-struct BackgroundView<Content: View>: View {
-    let type: BackgroundGradientType
+struct BaseScreen<Content: View>: View {
+    var backgroundType: BackgroundGradientType = .purpleClassic
+    @Binding var isLoading: Bool
     let content: () -> Content
     
-    init(type: BackgroundGradientType = .purpleClassic,
-         @ViewBuilder content: @escaping () -> Content = { EmptyView() }) {
-        self.type = type
+    init(
+        backgroundType: BackgroundGradientType = .purpleClassic,
+        isLoading: Binding<Bool> = .constant(false),
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.backgroundType = backgroundType
+        self._isLoading = isLoading
         self.content = content
     }
     
     private var linearColors: [Color] {
-        switch type {
+        switch backgroundType {
         case .purpleClassic:
             return [Color(red: 70/255, green: 50/255, blue: 150/255),
                     Color(red: 15/255, green: 10/255, blue: 50/255)]
@@ -39,7 +44,7 @@ struct BackgroundView<Content: View>: View {
     }
     
     private var radialColors: [Color] {
-        switch type {
+        switch backgroundType {
         case .purpleClassic:
             return [Color.purple.opacity(0.3), Color.clear]
         case .blueSunset:
@@ -69,10 +74,10 @@ struct BackgroundView<Content: View>: View {
             .ignoresSafeArea()
             
             content()
+                .blur(radius: isLoading ? 5 : 0)
+            
+            LoadingEffectView()
+                .opacity(isLoading ? 1 : 0)
         }
     }
-}
-
-#Preview {
-    BackgroundView()
 }

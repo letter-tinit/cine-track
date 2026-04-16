@@ -1,5 +1,5 @@
 //
-//  MovieItemView.swift
+//  MovieView.swift
 //  CineTrack
 //
 //  Created by TiniT on 2/4/26.
@@ -30,11 +30,13 @@ enum ItemType {
     }
 }
 
-struct MovieItemView: View {
+struct MovieView: View {
     let movie: Movie
     var itemType: ItemType = .item
     var cornerRadius: CGFloat = 0
     
+    @Environment(MovieStore.self) private var movieStore
+
     var body: some View {
         ScaledAsyncImage(
             url: movie.posterURL,
@@ -42,24 +44,14 @@ struct MovieItemView: View {
             designHeight: itemType.designHeight,
             cornerRadius: cornerRadius
         )
+        .onTapGesture {
+            Task {
+                await movieStore.getMovieDetail(movie.id)
+            }
+        }
     }
 }
 
 #Preview {
-    MovieItemView(movie: .mock)
-}
-
-struct TVShowItemView: View {
-    let show: TVShow
-    var itemType: ItemType = .item
-    var cornerRadius: CGFloat = 0
-    
-    var body: some View {
-        ScaledAsyncImage(
-            url: show.posterURL,
-            designWidth: itemType.designWidth,
-            designHeight: itemType.designHeight,
-            cornerRadius: cornerRadius
-        )
-    }
+    MovieView(movie: Movie.mock)
 }

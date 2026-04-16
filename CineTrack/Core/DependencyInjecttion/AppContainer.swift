@@ -13,9 +13,9 @@ final class AppContainer {
     lazy var movieRepository: MovieRepository = MovieRepositoryImpl(apiClient: apiClient)
     
     // MARK: -  UseCase
-    lazy var movieListUseCase: MovieListUseCase = MovieListUseCaseImpl(repository: movieRepository)
+    lazy var movieListUseCase: MovieUseCase = MovieUseCaseImpl(repository: movieRepository)
     
-    func makeMovieListViewModel() -> MovieListViewModel {
-        MovieListViewModel(useCase: movieListUseCase)
+    func makeMovieStore() -> MovieStore {
+        MovieStore(useCase: movieListUseCase)
     }
 }

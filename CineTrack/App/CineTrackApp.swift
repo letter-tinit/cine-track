@@ -9,10 +9,12 @@ import SwiftUI
 
 @main
 struct CineTrackApp: App {
+    @State private var store = AppContainer().makeMovieStore()
+    
     var body: some Scene {
-        let container = AppContainer()
         WindowGroup {
-            ContentView(viewModel: container.makeMovieListViewModel())
+            MainTabScreen()
+                .environment(store)
         }
     }
 }
