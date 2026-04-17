@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MovieDetailScreen: View {
     let movie: MovieDetail
+    
+    @State private var isFavorited: Bool = false
     var body: some View {
         let voteAverage = (movie.voteAverage ?? 0) / 2
         
@@ -29,7 +31,8 @@ struct MovieDetailScreen: View {
                 }
                 .scrollDisabled(true)
                 .scrollEdgeEffectStyle(.soft, for: .all)
-                
+                .ignoresSafeArea()
+
                 // MARK: - Content
                 ScrollView(.vertical, showsIndicators: false) {
                     // MARK: - MAIN STACK
@@ -106,13 +109,33 @@ struct MovieDetailScreen: View {
                         
                         Spacer(minLength: 90)
                     }
-                    .padding(.top, 140)
                     .padding(.horizontal, 16)
                 }
             }
-            .ignoresSafeArea()
         }
         .foregroundStyle(.white)
+        .toolbarVisibility(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Image(systemName: "arrow.down")
+            }
+            
+            ToolbarSpacer(placement: .topBarTrailing)
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isFavorited.toggle()
+                } label: {
+                    Image(systemName: isFavorited ? "star.fill" : "star")
+                }
+                .foregroundStyle(.black)
+            }
+        }
+    }
+    
+    @MainActor
+    func action() {
+        
     }
 }
 

@@ -118,7 +118,7 @@ struct HomeScreen: View {
                         )
                     }
                     
-                    Spacer(minLength: 60)
+                    Spacer()
                 }
             }
             .errorAlert($movieStore.errorMessage)

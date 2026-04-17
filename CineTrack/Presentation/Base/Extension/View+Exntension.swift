@@ -14,8 +14,8 @@ extension View {
     
     func screenNameStyle() -> some View {
         self
-            .font(.title3)
-            .fontWeight(.bold)
+            .font(.headline)
+            .fontWeight(.semibold)
             .foregroundStyle(.white)
             .opacity(0.8)
             .shadow(color: .cyan, radius: 2)

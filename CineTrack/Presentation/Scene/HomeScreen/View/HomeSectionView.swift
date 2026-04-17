@@ -12,7 +12,6 @@ struct HomeSectionView<Content: View, Item: Identifiable>: View {
     let items: [Item]
     var selectionPeriod: Binding<TimePeriod>? = nil
     
-
     let content: (Item) -> Content
     
     var body: some View {

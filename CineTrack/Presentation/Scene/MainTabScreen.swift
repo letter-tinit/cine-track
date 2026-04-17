@@ -12,36 +12,45 @@ struct MainTabScreen: View {
     @State private var isExpanded: Bool = false
     @State private var homeRouter = HomeRouter()
     @State private var searchRouter = SearchRouter()
-
-    init() {
-        /// Hidden system Tabbar for using custom
-        UITabBar.appearance().isHidden = true
+    
+    var tintColor: Color {
+        switch activeTab {
+        case .home: return .teal
+        case .search: return .purple
+        case .favorite: return .red
+        case .profile: return .mint
+        }
     }
     
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $activeTab) {
-                NavigationStack(path: $homeRouter.path) {
-                    HomeScreen()
-                        .environment(homeRouter)
+                Tab(AppTab.home.rawValue, systemImage: AppTab.home.symbolImage, value: .home) {
+                    NavigationStack(path: $homeRouter.path) {
+                        HomeScreen()
+                            .environment(homeRouter)
+                    }
                 }
-                .tag(AppTab.home)
-
-                SearchScreen()
-                    .tag(AppTab.search)
-                    .environment(searchRouter)
                 
-                Rectangle().foregroundStyle(.clear)
-                    .tag(AppTab.favorite)
-                    .background(.red)
+                Tab(AppTab.search.rawValue, systemImage: AppTab.search.symbolImage, value: .search) {
+                    NavigationStack(path: $homeRouter.path) {
+                        EmptyView()
+                    }
+                }
                 
-                Rectangle().foregroundStyle(.clear)
-                    .tag(AppTab.profile)
+                Tab(AppTab.favorite.rawValue, systemImage: AppTab.favorite.symbolImage, value: .favorite) {
+                    NavigationStack(path: $homeRouter.path) {
+                        EmptyView()
+                    }
+                }
+                
+                Tab(AppTab.profile.rawValue, systemImage: AppTab.profile.symbolImage, value: .profile) {
+                    NavigationStack(path: $homeRouter.path) {
+                        EmptyView()
+                    }
+                }
             }
-            
-            MorphingTabBar(activeTab: $activeTab, isExpanded: $isExpanded)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 25)
+            .tint(tintColor)
         }
         .ignoresSafeArea()
     }
