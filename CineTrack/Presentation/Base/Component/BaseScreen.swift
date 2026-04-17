@@ -15,15 +15,23 @@ enum BackgroundGradientType {
 }
 
 struct BaseScreen<Content: View>: View {
+    @Environment(\.dismiss) private var dismiss
+    
+    var screenTitle: String?
+    var hasBack: Bool
     var backgroundType: BackgroundGradientType = .purpleClassic
     @Binding var isLoading: Bool
     let content: () -> Content
     
     init(
+        screenTitle: String? = nil,
+        hasBack: Bool = true,
         backgroundType: BackgroundGradientType = .purpleClassic,
         isLoading: Binding<Bool> = .constant(false),
         @ViewBuilder content: @escaping () -> Content
     ) {
+        self.screenTitle = screenTitle
+        self.hasBack = hasBack
         self.backgroundType = backgroundType
         self._isLoading = isLoading
         self.content = content
@@ -79,5 +87,6 @@ struct BaseScreen<Content: View>: View {
             LoadingEffectView()
                 .opacity(isLoading ? 1 : 0)
         }
+        .navigationToolbar(title: screenTitle, hasBack: hasBack)
     }
 }

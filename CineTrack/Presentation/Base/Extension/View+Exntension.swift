@@ -8,9 +8,13 @@
 import SwiftUI
 
 extension View {
+    func navigationToolbar(title: String? = nil, hasBack: Bool) -> some View {
+        modifier(NavigationToolbarModifier(title: title, hasBack: hasBack))
+    }
+    
     func screenNameStyle() -> some View {
         self
-            .font(.title2)
+            .font(.title3)
             .fontWeight(.bold)
             .foregroundStyle(.white)
             .opacity(0.8)

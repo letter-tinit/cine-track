@@ -50,7 +50,10 @@ struct HomeScreen: View {
         @Bindable var movieStore = movieStore
         @Bindable var router = router
         
-        BaseScreen(isLoading: $movieStore.isLoading) {
+        BaseScreen(
+            screenTitle: "Cine Track",
+            isLoading: $movieStore.isLoading
+        ) {
             // MARK: - Container
             ScrollView(.vertical) {
                 VStack {
@@ -119,13 +122,6 @@ struct HomeScreen: View {
                 }
             }
             .errorAlert($movieStore.errorMessage)
-            .toolbarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .title) {
-                    Text("Cine Track")
-                        .screenNameStyle()
-                }
-            }
         }
         // MARK: - LOAD DATA
         .task {

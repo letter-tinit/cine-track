@@ -7,6 +7,25 @@
 
 import SwiftUI
 
+struct NavigationToolbarModifier: ViewModifier {
+    @Environment(\.dismiss) private var dismiss
+    let title: String?
+    let hasBack: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .toolbar {
+                if let title {
+                    ToolbarItem(placement: .title) {
+                        Text(title)
+                            .screenNameStyle()
+                    }
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
 struct TitleStyle: ViewModifier {
     var font: Font = .title3
     var weight: Font.Weight = .bold

@@ -12,87 +12,105 @@ struct MovieDetailScreen: View {
     var body: some View {
         let voteAverage = (movie.voteAverage ?? 0) / 2
         
-        BaseScreen {
-            ScrollView(.vertical, showsIndicators: false) {
-                // MARK: - MAIN STACK
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack(spacing: 16) {
-                        ScaledAsyncImage(
-                            url: movie.posterURL,
-                            designWidth: 160,
-                            designHeight: 240,
-                            cornerRadius: 20
+        BaseScreen(
+            screenTitle: movie.title
+        ) {
+            ZStack(alignment: .top) {
+                // MARK: - Backdrop
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack {
+                        BackdropAsyncImage(
+                            url: movie.backdropURL,
+                            designHeight: 200,
                         )
                         
-                        VStack(alignment: .leading) {
-                            MovieDescriptionView(
-                                label: "Genre",
-                                content: movie.genres.map { $0.name }.joined(separator: ", ")
-                            )
-                            
-                            MovieDescriptionView(
-                                label: "Status",
-                                content: movie.status ?? ""
-                            )
-                            
-                            MovieDescriptionView(
-                                label: "Date",
-                                content: movie.releaseDate ?? ""
-                            )
-                            
-                            MovieDescriptionView(
-                                label: "Runtime",
-                                content: "\(movie.runtime ?? 1)"
-                            )
-                            
-                            MovieDescriptionView(
-                                label: "Revenue",
-                                content: "\(movie.revenue ?? 1)"
-                            )
-                            
-                            Spacer()
-                        }
+                        Spacer()
                     }
-                    
-                    Text(movie.title)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .padding(.top, 10)
-                    
-                    RatingProgressView(voteAverage: voteAverage)
-                        .padding(.top, 10)
-                    
-                    Text(movie.overview ?? "")
-                        .font(.subheadline)
-                        .fontWeight(.regular)
-                        .padding(.top, 10)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Companies")
+                }
+                .scrollDisabled(true)
+                .scrollEdgeEffectStyle(.soft, for: .all)
+                
+                // MARK: - Content
+                ScrollView(.vertical, showsIndicators: false) {
+                    // MARK: - MAIN STACK
+                    VStack(alignment: .leading, spacing: 0) {
+                        HStack(spacing: 16) {
+                            // MARK: - Poster
+                            ScaledAsyncThumnailImage(
+                                url: movie.posterURL,
+                                designWidth: 160,
+                                designHeight: 240,
+                                cornerRadius: 20
+                            )
+                            
+                            // MARK: - Detail
+                            VStack(alignment: .leading) {
+                                MovieDescriptionView(
+                                    label: "Status",
+                                    content: movie.status ?? ""
+                                )
+                                
+                                MovieDescriptionView(
+                                    label: "Date",
+                                    content: movie.releaseDate ?? ""
+                                )
+                                
+                                MovieDescriptionView(
+                                    label: "Runtime",
+                                    content: "\(movie.runtime ?? 1)"
+                                )
+                                
+                                MovieDescriptionView(
+                                    label: "Revenue",
+                                    content: "\(movie.revenue ?? 1)"
+                                )
+                                
+                                MovieDescriptionView(
+                                    label: "Genre",
+                                    content: movie.genres.map { $0.name }.joined(separator: ", ")
+                                )
+                                
+                                Spacer()
+                            }
+                        }
+                        
+                        // MARK: - Description
+                        Text(movie.title)
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(.top, 10)
                         
-                        VStack(alignment: .center) {
-                            ScaledAsyncImage(url: movie.productionCompanies[0].logoURL, designWidth: 120, designHeight: 60)
-                            Text(movie.productionCompanies[0].name)
-                                .font(.headline)
+                        RatingProgressView(voteAverage: voteAverage)
+                            .padding(.top, 10)
+                        
+                        Text(movie.overview ?? "")
+                            .font(.subheadline)
+                            .fontWeight(.regular)
+                            .padding(.top, 10)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Companies")
+                                .font(.title3)
                                 .fontWeight(.semibold)
-                                .foregroundStyle(.cyan)
+                                .padding(.top, 10)
+                            
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    ForEach(movie.productionCompanies, id: \.self) { company in
+                                        ScaledAsyncThumnailImage(url: company.logoURL, designWidth: 120, designHeight: 60)
+                                    }
+                                }
+                            }
+                            .scrollIndicators(.hidden)
                         }
-                        .padding(10)
-                        .background(.white.opacity(0.7))
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 10)
-                        )
-                        .shadow(radius: 4)
+                        
+                        Spacer(minLength: 90)
                     }
-                    
-                    Spacer(minLength: 60)
+                    .padding(.top, 140)
+                    .padding(.horizontal, 16)
                 }
-                .padding(.horizontal, 16)
-                
             }
+            .ignoresSafeArea()
         }
         .foregroundStyle(.white)
     }

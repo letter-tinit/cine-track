@@ -38,7 +38,7 @@ struct MovieView: View {
     @Environment(MovieStore.self) private var movieStore
 
     var body: some View {
-        ScaledAsyncImage(
+        ScaledAsyncThumnailImage(
             url: movie.posterURL,
             designWidth: itemType.designWidth,
             designHeight: itemType.designHeight,
