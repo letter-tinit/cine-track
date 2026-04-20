@@ -121,15 +121,6 @@ struct MovieDetailScreen: View {
             }
             
             ToolbarSpacer(placement: .topBarTrailing)
-            
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isFavorited.toggle()
-                } label: {
-                    Image(systemName: isFavorited ? "star.fill" : "star")
-                }
-                .foregroundStyle(.black)
-            }
         }
     }
     

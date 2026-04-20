@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MainTabScreen: View {
     @State private var activeTab: AppTab = .home
@@ -26,10 +27,16 @@ struct MainTabScreen: View {
         ZStack(alignment: .bottom) {
             TabView(selection: $activeTab) {
                 Tab(AppTab.home.rawValue, systemImage: AppTab.home.symbolImage, value: .home) {
-                    NavigationStack(path: $homeRouter.path) {
+                    AppNavigationStack(path: $homeRouter.path) {
                         HomeScreen()
                             .environment(homeRouter)
+                    } destination: { (route: HomeRoute) in
+                        switch route {
+                        case .movieDetail(let movieDetail):
+                            MovieDetailScreen(movie: movieDetail)
+                        }
                     }
+
                 }
                 
                 Tab(AppTab.search.rawValue, systemImage: AppTab.search.symbolImage, value: .search) {
@@ -57,6 +64,6 @@ struct MainTabScreen: View {
 }
 
 #Preview {
-    MainTabScreen()
+    return MainTabScreen()
         .environment(AppContainer().makeMovieStore())
 }

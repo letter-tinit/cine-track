@@ -35,7 +35,7 @@ struct ScaledAsyncThumnailImage: View {
         case .success(let image):
             image
                 .resizable()
-                .unredacted() // ensure no leftover redaction
+                .unredacted()
 
         case .failure:
             Image(systemName: "photo")

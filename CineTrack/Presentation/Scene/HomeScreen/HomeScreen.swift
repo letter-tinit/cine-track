@@ -93,7 +93,6 @@ struct HomeScreen: View {
                             cornerRadius: 16
                         )
                     }
-                    
                     // MARK: - NOW PLAYING
                     HomeSectionView(
                         title: "Now Playing",
@@ -135,12 +134,12 @@ struct HomeScreen: View {
             movieStore.didChangeTimePeriod()
         }
         // MARK: - Navigation Management
-        .navigationDestination(for: HomeRoute.self) { route in
-            switch route {
-            case .movieDetail(let movie):
-                MovieDetailScreen(movie: movie)
-            }
-        }
+//        .navigationDestination(for: HomeRoute.self) { route in
+//            switch route {
+//            case .movieDetail(let movie):
+//                MovieDetailScreen(movie: movie)
+//            }
+//        }
     }
 }
 
