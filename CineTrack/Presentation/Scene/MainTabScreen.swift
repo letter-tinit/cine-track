@@ -13,7 +13,8 @@ struct MainTabScreen: View {
     @State private var isExpanded: Bool = false
     @State private var homeRouter = HomeRouter()
     @State private var searchRouter = SearchRouter()
-    
+    @State private var favoriteRouter = FavoriteRouter()
+
     var tintColor: Color {
         switch activeTab {
         case .home: return .teal
@@ -34,6 +35,7 @@ struct MainTabScreen: View {
                         switch route {
                         case .movieDetail(let movieDetail):
                             MovieDetailScreen(movie: movieDetail)
+                                .foregroundStyle(.black)
                         }
                     }
 
@@ -46,9 +48,9 @@ struct MainTabScreen: View {
                 }
                 
                 Tab(AppTab.favorite.rawValue, systemImage: AppTab.favorite.symbolImage, value: .favorite) {
-                    NavigationStack(path: $homeRouter.path) {
-                        EmptyView()
-                    }
+                    AppNavigationStack(path: $favoriteRouter.path) {
+                        FavoriteScreen()
+                    } destination: { _ in }
                 }
                 
                 Tab(AppTab.profile.rawValue, systemImage: AppTab.profile.symbolImage, value: .profile) {

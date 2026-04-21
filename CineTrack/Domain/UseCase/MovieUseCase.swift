@@ -14,6 +14,10 @@ public protocol MovieUseCase {
     func getNowPlayingMovie(page: Int) async throws -> [Movie]
     func getUpcomingMovie(page: Int) async throws -> [Movie]
     func getMovieDetailById(_ id: Int) async throws -> MovieDetail
+    func saveFavorite(movie: Movie) throws
+    func removeFavorite(movieId: Int) throws
+    func isFavorite(movieId: Int) throws -> Bool
+    func getFavorites() throws -> [Movie]
 }
 
 final class MovieUseCaseImpl: MovieUseCase {
@@ -45,5 +49,21 @@ final class MovieUseCaseImpl: MovieUseCase {
     
     func getMovieDetailById(_ id: Int) async throws -> MovieDetail {
         try await repository.fetchMovieDetailById(id)
+    }
+    
+    func saveFavorite(movie: Movie) throws {
+        try repository.saveFavorite(movie: movie)
+    }
+    
+    func removeFavorite(movieId: Int) throws {
+        try repository.removeFavorite(movieId: movieId)
+    }
+    
+    func isFavorite(movieId: Int) throws -> Bool {
+        try repository.isFavorite(movieId: movieId)
+    }
+    
+    func getFavorites() throws -> [Movie] {
+        try repository.getFavorites()
     }
 }

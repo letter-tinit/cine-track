@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct MovieDetailScreen: View {
+    @Environment(MovieStore.self) private var movieStore
     let movie: MovieDetail
     
     @State private var isFavorited: Bool = false
     var body: some View {
-        let voteAverage = (movie.voteAverage ?? 0) / 2
-        
         BaseScreen(
             screenTitle: movie.title
         ) {
@@ -83,7 +82,7 @@ struct MovieDetailScreen: View {
                             .fontWeight(.semibold)
                             .padding(.top, 10)
                         
-                        RatingProgressView(voteAverage: voteAverage)
+                        RatingProgressView(voteAverage: movie.ratingValue)
                             .padding(.top, 10)
                         
                         Text(movie.overview ?? "")
@@ -98,9 +97,14 @@ struct MovieDetailScreen: View {
                                 .padding(.top, 10)
                             
                             ScrollView(.horizontal) {
-                                HStack {
+                                HStack(spacing: 16) {
                                     ForEach(movie.productionCompanies, id: \.self) { company in
                                         ScaledAsyncThumnailImage(url: company.logoURL, designWidth: 120, designHeight: 60)
+                                            .padding(10)
+                                            .background(.white)
+                                            .clipShape(
+                                                RoundedRectangle(cornerRadius: 10)
+                                            )
                                     }
                                 }
                             }
@@ -117,10 +121,31 @@ struct MovieDetailScreen: View {
         .toolbarVisibility(.hidden, for: .tabBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Image(systemName: "arrow.down")
+                Button {
+                    // Action
+                } label: {
+                    Image(systemName: "arrow.down")
+                }
             }
             
             ToolbarSpacer(placement: .topBarTrailing)
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    withAnimation(.spring(duration: 0.3)) {
+                        movieStore.toggleFavorite(movie: Movie(from: movie)) {
+                            isFavorited.toggle()
+                        }
+                    }
+                } label: {
+                    Image(systemName: isFavorited ? "heart.fill" : "heart")
+                }
+                .foregroundStyle(isFavorited ? .red : .black)
+                .scaleEffect(isFavorited ? 1.2 : 1)
+            }
+        }
+        .onAppear {
+            isFavorited = movieStore.isFavorite(movieId: movie.id)
         }
     }
     

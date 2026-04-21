@@ -21,7 +21,7 @@ enum AppTab: String, MorphingTabProtocol {
         case .search:
             "magnifyingglass"
         case .favorite:
-            "star"
+            "heart"
         case .profile:
             "person"
         }

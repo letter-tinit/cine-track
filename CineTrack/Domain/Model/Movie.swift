@@ -108,3 +108,27 @@ extension Movie {
         return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
     }
 }
+
+extension Movie {
+    init(from detail: MovieDetail) {
+        self.id = detail.id
+        self.title = detail.title
+        self.originalTitle = detail.originalTitle
+        
+        // Movie requires non-optional → provide fallback
+        self.overview = detail.overview ?? ""
+        self.posterPath = detail.posterPath
+        self.backdropPath = detail.backdropPath
+        
+        // Convert [Genre] → [Int]
+        self.genreIDs = detail.genres.map { $0.id }
+        
+        self.popularity = detail.popularity ?? 0
+        self.releaseDate = detail.releaseDate ?? ""
+        self.voteAverage = detail.voteAverage ?? 0
+        self.voteCount = detail.voteCount ?? 0
+        
+        self.adult = detail.adult
+        self.video = detail.video
+    }
+}

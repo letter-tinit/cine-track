@@ -10,12 +10,12 @@ import SwiftData
 
 @main
 struct CineTrackApp: App {
-    @State private var store = AppContainer().makeMovieStore()
+    private let appContainer = AppContainer()
     
     var body: some Scene {
         WindowGroup {
             MainTabScreen()
-                .environment(store)
+                .environment(appContainer.makeMovieStore())
         }
     }
 }

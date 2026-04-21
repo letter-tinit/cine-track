@@ -12,6 +12,7 @@ import Observation
 @MainActor
 @Observable
 final class MovieStore: BaseStore {
+    var favoriteIds: Set<Int> = []
     var timePeriod: TimePeriod = .day
     
     // MARK: - Repository
@@ -20,6 +21,7 @@ final class MovieStore: BaseStore {
     var topRateMovies: [Movie] = []
     var nowPlayingMovies: [Movie] = []
     var upcomingMovies: [Movie] = []
+    var favoritedMovies: [Movie] = []
     
     // MARK: - Callback
     var onHomeRoute: ((HomeRoute) -> Void)?
@@ -121,5 +123,53 @@ final class MovieStore: BaseStore {
         loadTask = Task {
             await loadTrending()
         }
+    }
+    
+    func toggleFavorite(movie: Movie, completion: VoidClosure) {
+        if isFavorite(movieId: movie.id) {
+            removeFavorite(movieId: movie.id, completion: completion)
+        } else {
+            saveFavorite(movie: movie, completion: completion)
+        }
+    }
+    
+    private func saveFavorite(movie: Movie, completion: VoidClosure) {
+        do {
+            try useCase.saveFavorite(movie: movie)
+            completion()
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    private func removeFavorite(movieId: Int, completion: VoidClosure) {
+        do {
+            try useCase.removeFavorite(movieId: movieId)
+            completion()
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    func isFavorite(movieId: Int) -> Bool {
+        do {
+            return try useCase.isFavorite(movieId: movieId)
+        } catch {
+            handleError(error)
+        }
+        
+        return false
+    }
+    
+    func loadFavorites(){
+        do {
+            favoritedMovies = try useCase.getFavorites()
+        } catch {
+            handleError(error)
+        }
+    }
+    
+    func a() {
+        print("A")
     }
 }

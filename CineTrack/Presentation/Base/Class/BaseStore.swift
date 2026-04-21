@@ -11,7 +11,7 @@ import Observation
 class BaseStore {
     var errorMessage: String? = nil
     var isLoading = false
-
+    
     open func handleError(_ error: Error) {
         if let apiError = error as? APIError {
             switch apiError {
@@ -24,7 +24,17 @@ class BaseStore {
             default:
                 errorMessage = "Something went wrong"
             }
-        } else {
+        } else if let favoriteError = error as? FavoriteLocalDataError {
+            switch favoriteError {
+            case .saveFailed:
+                errorMessage = "Failed to save favorite. Please try again."
+            case .fetchFailed:
+                errorMessage = "Failed to load favorites. Please try again."
+            case .movieNotFound:
+                errorMessage = "Movie not found in your favorites."
+            }
+        }
+        else {
             errorMessage = "Unexpected error"
         }
     }

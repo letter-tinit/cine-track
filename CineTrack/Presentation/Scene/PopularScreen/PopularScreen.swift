@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PopularScreen: View {
     @Bindable var viewModel: MovieStore
@@ -28,5 +29,7 @@ struct PopularScreen: View {
 }
 
 #Preview {
-    PopularScreen(viewModel: AppContainer().makeMovieStore())
+    let appContainer = AppContainer()
+    
+    PopularScreen(viewModel: appContainer.makeMovieStore())
 }

@@ -29,9 +29,11 @@ enum MovieEndpointMapping {
 
 final class MovieRepositoryImpl: MovieRepository {
     private let apiClient: APIClient
+    private let localDataSource: FavoriteLocalDataSource
     
-    init(apiClient: APIClient) {
+    init(apiClient: APIClient, localDataSource: FavoriteLocalDataSource) {
         self.apiClient = apiClient
+        self.localDataSource = localDataSource
     }
     
     func getTrendingMovies(timePeriod: TimePeriod) async throws -> [Movie] {
@@ -68,5 +70,21 @@ final class MovieRepositoryImpl: MovieRepository {
             endpoint: String(format: APIConstants.Movie.detail, idString),
             params: [:]
         )
+    }
+    
+    func saveFavorite(movie: Movie) throws {
+        try localDataSource.save(movie: movie)
+    }
+    
+    func removeFavorite(movieId: Int) throws {
+        try localDataSource.remove(movieId: movieId)
+    }
+    
+    func isFavorite(movieId: Int) throws -> Bool {
+        try localDataSource.isFavorite(movieId: movieId)
+    }
+    
+    func getFavorites() throws -> [Movie] {
+        try localDataSource.fetchAll()
     }
 }
