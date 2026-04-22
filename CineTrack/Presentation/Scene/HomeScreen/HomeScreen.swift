@@ -124,22 +124,8 @@ struct HomeScreen: View {
         }
         // MARK: - LOAD DATA
         .task {
-            movieStore.onHomeRoute = { route in
-                router.push(route)
-            }
             await movieStore.loadHomeData()
         }
-        // MARK: - Handle Action
-        .onChange(of: movieStore.timePeriod) {
-            movieStore.didChangeTimePeriod()
-        }
-        // MARK: - Navigation Management
-//        .navigationDestination(for: HomeRoute.self) { route in
-//            switch route {
-//            case .movieDetail(let movie):
-//                MovieDetailScreen(movie: movie)
-//            }
-//        }
     }
 }
 

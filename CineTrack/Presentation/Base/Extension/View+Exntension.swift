@@ -43,4 +43,20 @@ extension View {
             self
         }
     }
+    
+    func alertView(
+        isPresented: Binding<Bool>,
+        alertType: AlertViewType,
+        primaryAction: AlertButton? = nil,
+        secondaryAction: AlertButton? = nil
+    ) -> some View {
+        self.modifier(
+            AlertViewModifier(
+                isPresented: isPresented,
+                alertType: alertType,
+                primaryAction: primaryAction,
+                secondaryAction: secondaryAction
+            )
+        )
+    }
 }

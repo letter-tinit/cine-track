@@ -8,7 +8,9 @@
 import SwiftUI
 import Observation
 
-enum FavoriteRoute: Hashable {}
+enum FavoriteRoute: Hashable {
+    case movieDetail
+}
 
 @Observable
 final class FavoriteRouter: AppRouter<FavoriteRoute> {}

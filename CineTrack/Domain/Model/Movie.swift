@@ -107,6 +107,15 @@ extension Movie {
         guard let posterPath = posterPath else { return nil }
         return URL(string: "https://image.tmdb.org/t/p/w500\(posterPath)")
     }
+    
+    var backdropURL: URL? {
+        guard let backdropPath else { return nil }
+        return URL(string: "https://image.tmdb.org/t/p/w500\(backdropPath)")
+    }
+    
+     var roundedVoteAverage: String {
+        String(format: "%.1f", voteAverage)
+    }
 }
 
 extension Movie {

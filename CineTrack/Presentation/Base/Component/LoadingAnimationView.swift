@@ -14,6 +14,7 @@ struct LoadingAnimationView: View {
             .playing()
             .looping()
             .animationSpeed(1.5)
+        
     }
 }
 

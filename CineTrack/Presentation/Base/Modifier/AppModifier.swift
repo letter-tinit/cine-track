@@ -58,3 +58,35 @@ struct ErrorAlertModifier: ViewModifier {
         }
     }
 }
+
+struct AlertViewModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    
+    let alertType: AlertViewType
+    let primaryAction: AlertButton?
+    let secondaryAction: AlertButton?
+    
+    func body(content: Content) -> some View {
+        ZStack {
+            content
+                .blur(radius: isPresented ? 5 : 0)
+                .disabled(isPresented)
+            if isPresented {
+                Color.gray.opacity(0.001)
+                    .onTapGesture {
+                        isPresented = false
+                    }
+                    .ignoresSafeArea()
+
+                
+                AlertView(
+                    alertType: alertType,
+                    primaryAction: primaryAction,
+                    secondaryAction: secondaryAction
+                )
+                .transition(.scale.combined(with: .opacity))
+            }
+        }
+        .animation(.spring(duration: 0.3), value: isPresented)
+    }
+}

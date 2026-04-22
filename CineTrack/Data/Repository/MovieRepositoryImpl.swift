@@ -76,6 +76,10 @@ final class MovieRepositoryImpl: MovieRepository {
         try localDataSource.save(movie: movie)
     }
     
+    func removeAllFavorite() throws {
+        try localDataSource.removeAll()
+    }
+    
     func removeFavorite(movieId: Int) throws {
         try localDataSource.remove(movieId: movieId)
     }

@@ -35,6 +35,7 @@ public struct MovieDetail: Decodable, Identifiable, Hashable {
     public let video: Bool
     public let voteAverage: Double?
     public let voteCount: Int?
+    public var isFavorited: Bool = false
 
     enum CodingKeys: String, CodingKey {
         case adult

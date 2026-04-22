@@ -49,7 +49,24 @@ final class FavoriteLocalDataImpl: FavoriteLocalDataSource {
             context.delete(movie)
             try saveContext()
         } catch let error as FavoriteLocalDataError {
-            throw error // re-throw our custom errors as-is
+            throw error
+        } catch let error as NSError {
+            throw FavoriteLocalDataError.fetchFailed(error)
+        }
+    }
+    
+    func removeAll() throws {
+        let descriptor = FetchDescriptor<FavoriteMovieEntity>()
+        
+        do {
+            let movies = try context.fetch(descriptor)
+            movies.forEach { [weak self] movie in
+                guard let self else { return }
+                self.context.delete(movie)
+            }
+            try saveContext()
+        } catch let error as FavoriteLocalDataError {
+            throw error
         } catch let error as NSError {
             throw FavoriteLocalDataError.fetchFailed(error)
         }

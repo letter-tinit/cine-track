@@ -14,6 +14,65 @@ enum BackgroundGradientType {
     case custom(linear: [Color]? = nil, radial: [Color]? = nil)
 }
 
+enum AlertViewType {
+    case success(String)
+    case error(String)
+    case warning(String)
+    case info(String)
+    
+    var icon: Image {
+        switch self {
+        case .success:
+            return Image(systemName: "checkmark.circle")
+        case .error:
+            return Image(systemName: "xmark.octagon")
+        case .warning:
+            return Image(systemName: "exclamationmark.triangle")
+        case .info:
+            return Image(systemName: "info.circle")
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .success:
+            return .green
+        case .error:
+            return .red
+        case .warning:
+            return .orange
+        case .info:
+            return .cyan
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .success:
+            return "Success"
+        case .error:
+            return "Error"
+        case .warning:
+            return "Warning"
+        case .info:
+            return "Info"
+        }
+    }
+    
+    var message: String {
+        switch self {
+        case .success(let message):
+            return message
+        case .error(let message):
+            return message
+        case .warning(let message):
+            return message
+        case .info(let message):
+            return message
+        }
+    }
+}
+
 struct BaseScreen<Content: View>: View {
     @Environment(\.dismiss) private var dismiss
     
@@ -83,7 +142,7 @@ struct BaseScreen<Content: View>: View {
             
             content()
                 .blur(radius: isLoading ? 5 : 0)
-            
+
             LoadingEffectView()
                 .opacity(isLoading ? 1 : 0)
         }

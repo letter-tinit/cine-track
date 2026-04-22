@@ -11,6 +11,7 @@ protocol MovieRepository {
     func fetchMovieDetailById(_ id: Int) async throws -> MovieDetail
     func saveFavorite(movie: Movie) throws
     func removeFavorite(movieId: Int) throws
+    func removeAllFavorite() throws
     func isFavorite(movieId: Int) throws -> Bool
     func getFavorites() throws -> [Movie]
 }

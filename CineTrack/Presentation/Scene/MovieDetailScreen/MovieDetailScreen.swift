@@ -9,19 +9,18 @@ import SwiftUI
 
 struct MovieDetailScreen: View {
     @Environment(MovieStore.self) private var movieStore
-    let movie: MovieDetail
     
-    @State private var isFavorited: Bool = false
     var body: some View {
+        @State var isFavorited: Bool = movieStore.selectedMovieDetail.isFavorited
         BaseScreen(
-            screenTitle: movie.title
+            screenTitle: movieStore.selectedMovieDetail.title
         ) {
             ZStack(alignment: .top) {
                 // MARK: - Backdrop
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack {
                         BackdropAsyncImage(
-                            url: movie.backdropURL,
+                            url: movieStore.selectedMovieDetail.backdropURL,
                             designHeight: 200,
                         )
                         
@@ -39,7 +38,7 @@ struct MovieDetailScreen: View {
                         HStack(spacing: 16) {
                             // MARK: - Poster
                             ScaledAsyncThumnailImage(
-                                url: movie.posterURL,
+                                url: movieStore.selectedMovieDetail.posterURL,
                                 designWidth: 160,
                                 designHeight: 240,
                                 cornerRadius: 20
@@ -49,27 +48,27 @@ struct MovieDetailScreen: View {
                             VStack(alignment: .leading) {
                                 MovieDescriptionView(
                                     label: "Status",
-                                    content: movie.status ?? ""
+                                    content: movieStore.selectedMovieDetail.status ?? ""
                                 )
                                 
                                 MovieDescriptionView(
                                     label: "Date",
-                                    content: movie.releaseDate ?? ""
+                                    content: movieStore.selectedMovieDetail.releaseDate ?? ""
                                 )
                                 
                                 MovieDescriptionView(
                                     label: "Runtime",
-                                    content: "\(movie.runtime ?? 1)"
+                                    content: "\(movieStore.selectedMovieDetail.runtime ?? 1)"
                                 )
                                 
                                 MovieDescriptionView(
                                     label: "Revenue",
-                                    content: "\(movie.revenue ?? 1)"
+                                    content: "\(movieStore.selectedMovieDetail.revenue ?? 1)"
                                 )
                                 
                                 MovieDescriptionView(
                                     label: "Genre",
-                                    content: movie.genres.map { $0.name }.joined(separator: ", ")
+                                    content: movieStore.selectedMovieDetail.genres.map { $0.name }.joined(separator: ", ")
                                 )
                                 
                                 Spacer()
@@ -77,15 +76,15 @@ struct MovieDetailScreen: View {
                         }
                         
                         // MARK: - Description
-                        Text(movie.title)
+                        Text(movieStore.selectedMovieDetail.title)
                             .font(.title3)
                             .fontWeight(.semibold)
                             .padding(.top, 10)
                         
-                        RatingProgressView(voteAverage: movie.ratingValue)
+                        RatingProgressView(voteAverage: movieStore.selectedMovieDetail.ratingValue)
                             .padding(.top, 10)
                         
-                        Text(movie.overview ?? "")
+                        Text(movieStore.selectedMovieDetail.overview ?? "")
                             .font(.subheadline)
                             .fontWeight(.regular)
                             .padding(.top, 10)
@@ -98,7 +97,7 @@ struct MovieDetailScreen: View {
                             
                             ScrollView(.horizontal) {
                                 HStack(spacing: 16) {
-                                    ForEach(movie.productionCompanies, id: \.self) { company in
+                                    ForEach(movieStore.selectedMovieDetail.productionCompanies, id: \.self) { company in
                                         ScaledAsyncThumnailImage(url: company.logoURL, designWidth: 120, designHeight: 60)
                                             .padding(10)
                                             .background(.white)
@@ -133,9 +132,7 @@ struct MovieDetailScreen: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     withAnimation(.spring(duration: 0.3)) {
-                        movieStore.toggleFavorite(movie: Movie(from: movie)) {
-                            isFavorited.toggle()
-                        }
+                        movieStore.toggleFavorite(movie: Movie(from: movieStore.selectedMovieDetail))
                     }
                 } label: {
                     Image(systemName: isFavorited ? "heart.fill" : "heart")
@@ -144,9 +141,7 @@ struct MovieDetailScreen: View {
                 .scaleEffect(isFavorited ? 1.2 : 1)
             }
         }
-        .onAppear {
-            isFavorited = movieStore.isFavorite(movieId: movie.id)
-        }
+        .tint(.white)
     }
     
     @MainActor
@@ -156,5 +151,5 @@ struct MovieDetailScreen: View {
 }
 
 #Preview {
-    MovieDetailScreen(movie: .mock)
+    MovieDetailScreen()
 }

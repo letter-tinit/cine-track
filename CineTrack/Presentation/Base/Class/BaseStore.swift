@@ -11,6 +11,15 @@ import Observation
 class BaseStore {
     var errorMessage: String? = nil
     var isLoading = false
+    var isPresentedAlert: Bool = false
+    
+    open func primaryAlertButton() -> AlertButton? {
+        nil
+    }
+    
+    open func secondaryAlertButton() -> AlertButton? {
+        nil
+    }
     
     open func handleError(_ error: Error) {
         if let apiError = error as? APIError {

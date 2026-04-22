@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct MainTabScreen: View {
-    @State private var activeTab: AppTab = .home
+    @State private var activeTab: AppTab = .favorite
     @State private var isExpanded: Bool = false
     @State private var homeRouter = HomeRouter()
     @State private var searchRouter = SearchRouter()
@@ -33,12 +33,10 @@ struct MainTabScreen: View {
                             .environment(homeRouter)
                     } destination: { (route: HomeRoute) in
                         switch route {
-                        case .movieDetail(let movieDetail):
-                            MovieDetailScreen(movie: movieDetail)
-                                .foregroundStyle(.black)
+                        case .movieDetail:
+                            MovieDetailScreen()
                         }
                     }
-
                 }
                 
                 Tab(AppTab.search.rawValue, systemImage: AppTab.search.symbolImage, value: .search) {
@@ -50,7 +48,13 @@ struct MainTabScreen: View {
                 Tab(AppTab.favorite.rawValue, systemImage: AppTab.favorite.symbolImage, value: .favorite) {
                     AppNavigationStack(path: $favoriteRouter.path) {
                         FavoriteScreen()
-                    } destination: { _ in }
+                            .environment(favoriteRouter)
+                    } destination: { (route: FavoriteRoute) in
+                        switch route {
+                        case .movieDetail:
+                            MovieDetailScreen()
+                        }
+                    }
                 }
                 
                 Tab(AppTab.profile.rawValue, systemImage: AppTab.profile.symbolImage, value: .profile) {

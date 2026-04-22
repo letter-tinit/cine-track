@@ -23,9 +23,9 @@ enum ItemType {
     var designHeight: CGFloat {
         switch self {
         case .largeItem:
-            240
+            designWidth/AppConstants.Ratio.posterRatio
         case .item:
-            200
+            designWidth/AppConstants.Ratio.posterRatio
         }
     }
 }
@@ -36,6 +36,7 @@ struct MovieView: View {
     var cornerRadius: CGFloat = 0
     
     @Environment(MovieStore.self) private var movieStore
+    @Environment(HomeRouter.self) private var router
 
     var body: some View {
         ScaledAsyncThumnailImage(
@@ -46,7 +47,9 @@ struct MovieView: View {
         )
         .onTapGesture {
             Task {
-                await movieStore.getMovieDetail(movie.id)
+                await movieStore.getMovieDetail(movie.id) {
+                    router.push(.movieDetail)
+                }
             }
         }
     }

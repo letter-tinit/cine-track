@@ -9,7 +9,7 @@ import SwiftUI
 import Observation
 
 enum HomeRoute: Hashable {
-    case movieDetail(MovieDetail)
+    case movieDetail
 }
 
 @Observable
