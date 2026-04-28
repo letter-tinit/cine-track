@@ -18,9 +18,7 @@ struct MainTabScreen: View {
     var tintColor: Color {
         switch activeTab {
         case .home: return .teal
-        case .search: return .purple
         case .favorite: return .red
-        case .profile: return .mint
         }
     }
     
@@ -39,12 +37,6 @@ struct MainTabScreen: View {
                     }
                 }
                 
-                Tab(AppTab.search.rawValue, systemImage: AppTab.search.symbolImage, value: .search) {
-                    NavigationStack(path: $homeRouter.path) {
-                        EmptyView()
-                    }
-                }
-                
                 Tab(AppTab.favorite.rawValue, systemImage: AppTab.favorite.symbolImage, value: .favorite) {
                     AppNavigationStack(path: $favoriteRouter.path) {
                         FavoriteScreen()
@@ -54,12 +46,6 @@ struct MainTabScreen: View {
                         case .movieDetail:
                             MovieDetailScreen()
                         }
-                    }
-                }
-                
-                Tab(AppTab.profile.rawValue, systemImage: AppTab.profile.symbolImage, value: .profile) {
-                    NavigationStack(path: $homeRouter.path) {
-                        EmptyView()
                     }
                 }
             }

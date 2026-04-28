@@ -10,20 +10,14 @@ import Lottie
 
 enum AppTab: String, MorphingTabProtocol {
     case home = "Home"
-    case search = "Search"
     case favorite = "Favorite"
-    case profile = "Profile"
     
     var symbolImage: String {
         return switch self {
         case .home:
             "house"
-        case .search:
-            "magnifyingglass"
         case .favorite:
             "heart"
-        case .profile:
-            "person"
         }
     }
 }
