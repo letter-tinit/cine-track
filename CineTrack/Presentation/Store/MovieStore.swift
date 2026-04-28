@@ -82,6 +82,11 @@ final class MovieStore: BaseStore {
     }
     
     func toggleFavorite(movie: Movie) {
+        guard !isLoading else { return }
+        isLoading = true
+        
+        defer { isLoading = false }
+        
         if isFavorite(movieId: movie.id) {
             removeFavorite(movieId: movie.id)
         } else {
@@ -90,6 +95,11 @@ final class MovieStore: BaseStore {
     }
     
     func loadFavorites() {
+        guard !isLoading else { return }
+        isLoading = true
+        
+        defer { isLoading = false }
+        
         do {
             favoritedMovies = try useCase.getFavorites()
         } catch {
@@ -98,6 +108,10 @@ final class MovieStore: BaseStore {
     }
     
     func removeAllFavorited() {
+        guard !isLoading else { return }
+        isLoading = true
+        
+        defer { isLoading = false }
         do {
             try useCase.removeAllFavorite()
             favoritedMovies = []

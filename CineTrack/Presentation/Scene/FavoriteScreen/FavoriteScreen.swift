@@ -16,8 +16,10 @@ struct FavoriteScreen: View {
     @State private var isRemindPresented: Bool = false
     
     var body: some View {
+        @Bindable var movieStore = movieStore
         BaseScreen(
-            screenTitle: "Favorite"
+            screenTitle: "Favorite",
+            isLoading: $movieStore.isLoading
         ) {
             // MARK: - Content
             ZStack {
@@ -75,6 +77,7 @@ struct FavoriteScreen: View {
             }
         }
         .foregroundStyle(.white)
+        .errorAlert($movieStore.errorMessage)
         .onAppear {
             movieStore.loadFavorites()
         }

@@ -81,7 +81,7 @@ struct MovieDetailScreen: View {
                             .fontWeight(.semibold)
                             .padding(.top, 10)
                         
-                        RatingProgressView(voteAverage: movieStore.selectedMovieDetail.ratingValue)
+                        RatingProgressView(voteAverage: movieStore.selectedMovieDetail.ratingValue, voteCount: movieStore.selectedMovieDetail.voteCount ?? 0)
                             .padding(.top, 10)
                         
                         Text(movieStore.selectedMovieDetail.overview ?? "")

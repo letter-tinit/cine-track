@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RatingProgressView: View {
     var voteAverage: Double = 0
+    var voteCount: Int = 0
     
     var body: some View {
         let fractional = modf(voteAverage).1
@@ -27,8 +28,12 @@ struct RatingProgressView: View {
                 }
             }
             
-            Spacer()
+            Text("(\(voteCount) votes)")
+                .font(.headline)
+                .fontWeight(.medium)
+                .foregroundStyle(.cyan)
             
+            Spacer()
         }
     }
 }
@@ -55,8 +60,4 @@ struct StarView: View {
         .frame(width: 20, height: 20)
         .shadow(radius: 4)
     }
-}
-
-#Preview {
-    RatingProgressView()
 }

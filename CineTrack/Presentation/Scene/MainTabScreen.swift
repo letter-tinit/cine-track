@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct MainTabScreen: View {
-    @State private var activeTab: AppTab = .favorite
+    @State private var activeTab: AppTab = .home
     @State private var isExpanded: Bool = false
     @State private var homeRouter = HomeRouter()
     @State private var searchRouter = SearchRouter()
